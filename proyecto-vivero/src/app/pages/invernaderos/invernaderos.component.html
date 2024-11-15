@@ -1,0 +1,42 @@
+
+<body>
+    <div class="container">
+      <br />
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <img src="Vector.png" alt="imagen" />
+          <a class="navbar-brand margen">SmartGarden</a>
+  
+          <a class="margen inicio" (click)="navegate('/home')">Inicio</a>
+  
+          <div
+            class="collapse navbar-collapse margenDerecha"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav esquina ms-auto">
+              <a class="nav-link capsula registro inicio" (click)="cerrarSesion()"
+                >Cerrar Sesion</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <hr />
+  
+    <div class="container">
+      <h1>Invernaderos</h1>
+      <div class="card-grid">
+
+        <div class="card">
+          <img src="invernadero-icon.png" alt="Icono de persona" class="card-icon" />
+          <span class="card-name">UFPSO</span>
+          <button class="card-button" (click)="navegate('/invernadero/1')">VER</button>
+        </div>
+      </div>
+      
+    </div>
+  
+    
+  </body>
+  

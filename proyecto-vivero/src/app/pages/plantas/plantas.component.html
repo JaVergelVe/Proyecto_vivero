@@ -1,0 +1,42 @@
+<body>
+    <div class="container">
+      <br />
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <img src="Vector.png" alt="imagen" />
+          <a class="navbar-brand margen">SmartGarden</a>
+  
+          <a class="margen inicio" (click)="navegate('/home')">Inicio</a>
+  
+          <div
+            class="collapse navbar-collapse margenDerecha"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav esquina ms-auto inicio">
+              <a class="nav-link capsula registro" (click)="cerrarSesion()"
+                >Cerrar Sesion</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  
+    <hr />
+    <div class="container">
+      <h1>Plantas</h1>
+      <div class="card-grid">
+
+        <div class="card " *ngFor="let planta of plantas" >
+          <img src="planta.png" alt="Icono de persona" class="card-icon" />
+          <span class="card-name">{{ planta.nombre_especie}}</span>
+          <button class="card-button" (click)="navegate('/planta/'+planta.id_plant)">VER</button>
+        </div>
+
+      </div>
+      
+    </div>
+  
+    
+  </body>
+  

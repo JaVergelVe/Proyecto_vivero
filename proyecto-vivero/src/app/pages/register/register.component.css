@@ -1,0 +1,49 @@
+
+.capsula{
+    padding: 10px 20px !important; 
+    background: #7CBE27;
+    color: white;                           
+    border-radius: 50px;             
+    display: inline-block; 
+    font-weight: bold;  
+    border: none;
+}
+
+
+.registro{
+    margin-left: 50px;
+}
+.capsula:hover {
+    background-color: green;     
+  }
+
+.verde:hover{
+    color: green;
+}
+
+  .verde{
+    text-decoration: none; 
+    color: #7CBE27;
+  }
+
+  body {
+    font-size: 22px; 
+}
+
+
+.margen{
+  margin-left: 20px;
+}
+
+.form-control {
+    padding: 15px 20px; 
+    font-size: 1.2rem; 
+    margin-bottom: 35px;
+    border-radius: 20px; 
+    
+}
+
+.form-control::placeholder {
+    color: #a0a0a0; 
+    opacity: 1; 
+}

@@ -1,0 +1,77 @@
+<body>
+  
+<div class="container">
+  <br>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ">
+      <div class="container-fluid">
+        <img src="Vector.png" alt="imagen">
+        <a class="navbar-brand  margen " >SmartGarden</a>
+
+        <div class="collapse navbar-collapse margenDerecha" id="navbarNavAltMarkup">
+
+          <div class="navbar-nav esquina ms-auto"   >
+            <a class="nav-link verde"  routerLink="" >Iniciar Sesion</a>
+            <a class="nav-link capsula registro " routerLink="register">Registrarse</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+</div>
+  <hr>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <div class="container">
+    
+     <h1>Iniciar Sesion para continuar</h1>
+     <br>
+     <br>
+     <br>
+     <br>
+     <form [formGroup]="contactForm" 
+     class="row g-3 needs-validation"
+     >
+      <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="Email" 
+        formControlName="email"
+        [ngClass]="{'is-invalid': hasErrors('email', 'required') || hasErrors('email','email')}"
+        >
+        @if(hasErrors('email', 'required')){
+
+          <span class="text-danger">Tienes que completar este campo</span>
+  
+        } @if(hasErrors('email', 'email')){
+  
+          <span class="text-danger">Tienes que escribir un correo valido</span>
+  
+        }
+      </div>
+      <div class="mb-3">
+        <label for="Password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="Password"
+        [ngClass]="{'is-invalid': hasErrors('password', 'required') }"
+        formControlName="password"
+        >
+        @if(hasErrors('password', 'required')){
+
+          <span class="text-danger">Tienes que completar este campo</span>
+  
+        } 
+      </div>
+      <br>
+      <br>
+      <br>
+      <button type="submit" class="capsula"  (click)="login()">Iniciar Sesion</button>
+      <br>
+      <br>
+      <a  class="verde " routerLink="register">Crear una cuenta</a>
+    </form>
+  </div>
+
+
+
+
+</body>

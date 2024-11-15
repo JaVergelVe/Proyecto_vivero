@@ -1,0 +1,54 @@
+<body>
+  <div class="container">
+    <br />
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <img src="Vector.png" alt="imagen" />
+        <a class="navbar-brand margen">SmartGarden</a>
+
+        <a class="margen navbar-brand">Inicio</a>
+
+        <div
+          class="collapse navbar-collapse margenDerecha"
+          id="navbarNavAltMarkup"
+        >
+          <div class="navbar-nav esquina ms-auto">
+            <a class="nav-link capsula registro inicio" (click)="cerrarSesion()"
+              >Cerrar Sesion</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <hr />
+  <div class="body2">
+    <div class="container2">
+      <div class="card btn-5">
+        <a (click)="navegate('/empleados')" class="btn-5-link">
+          <img src="empleados.png" alt="Empleados" />
+          <div class="overlay">
+            <p>Ver empleados registrados</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="card btn-5">
+        <a (click)="navegate('/plantas')">
+          <img src="plantas.png" alt="Plantas" />
+          <div class="overlay">
+            <p>Ver plantas registradas</p>
+          </div>
+        </a>
+      </div>
+      <div class="card btn-5">
+        <a (click)="navegate('/invernaderos')">
+          <img src="invernaderos.png" alt="Invernaderos" />
+          <div class="overlay">
+            <p>Ver invernaderos registrados</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>

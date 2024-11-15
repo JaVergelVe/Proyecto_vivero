@@ -1,0 +1,101 @@
+.inicio{
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.margen.inicio:hover {
+    color: #0056b3; /* Cambia el color de fondo al pasar el mouse */
+  }
+
+h1 {
+    margin-bottom: 20px;
+}
+
+/* Estilos de la tarjeta */
+.card {
+        justify-content: center;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    padding: 100px; /* Aumenta el espacio interno para hacer la tarjeta más grande */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 600px; /* Define un ancho mayor para hacer la tarjeta más grande */
+    background-color: rgb(220, 220, 220);
+    
+}
+
+.card-icon {
+    width: 180px; /* Aumenta el tamaño del ícono */
+    height: 180px;
+    margin-bottom: 50px; /* Espacio entre el ícono y el texto */
+}
+
+.card-name {
+
+    font-size: 40px; /* Aumenta el tamaño del texto */
+    color: #4CAF50;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 50px;
+}
+
+.card-button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 44px; /* Aumenta el tamaño del botón */
+    cursor: pointer;
+    font-size: 30px; /* Aumenta el tamaño de la fuente del botón */
+    transition: background-color 0.3s;
+}
+
+.card-button:hover {
+    background-color: green;
+}
+
+.capsula{
+    padding: 10px 20px !important; 
+    background: #7CBE27;
+    color: white;                           
+    border-radius: 50px;             
+    display: inline-block; 
+    font-weight: bold;  
+    border: none;
+}
+
+.container2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    min-height: 80vh; 
+    text-align: center; 
+  }
+
+.capsula:hover {
+    background-color: green;     
+  }
+
+.verde:hover{
+    color: green;
+}
+
+  .verde{
+    text-decoration: none; 
+    color: #7CBE27;
+  }
+
+ body {
+    font-size: 22px; 
+    box-sizing: border-box;
+
+}
+
+
+.margen{
+  margin-left: 20px;
+}

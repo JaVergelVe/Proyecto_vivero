@@ -1,0 +1,66 @@
+
+<body>
+    <div class="container">
+      <br />
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <img src="Vector.png" alt="imagen" />
+          <a class="navbar-brand margen">SmartGarden</a>
+  
+          <a class="margen inicio" (click)="navegate('/home')">Inicio</a>
+  
+          <div
+            class="collapse navbar-collapse margenDerecha"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav esquina ms-auto">
+              <a class="nav-link capsula registro inicio" (click)="cerrarSesion()"
+              >Cerrar Sesion</a>
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  
+    <hr />
+    <div class="container2">
+      <h1>Empleado</h1>
+      <div class="card-grid">
+        
+        <div class="card">
+          @if(empleado){
+            <div >
+              <img src="persona-grande.png" alt="Icono de persona" class="card-icon" />
+              <h2>{{ empleado.name_empleado }} {{ empleado.last_name }}</h2>
+              <p>ID: {{empleado.id_employee}}</p>
+              <p>Email: {{ empleado.email }}</p>
+              <p>JOB: {{empleado.job_name}}</p>
+            </div>
+          }
+
+          @if(!empleado){
+            <div >
+              <p>Cargando...</p>
+            </div>
+          }
+          
+        </div>
+        <br>
+        @if(admin){
+          <button class="card-button " (click)="navegate('/actualizarEmpleado/'+empleado.id_employee)"> Editar</button>
+          <button class="card-button margen" (click)="eliminarEmpleado()"> Eliminar</button>  
+        }
+        
+        <br>
+        <br>
+        <button class="card-button" (click)="navegate('/empleados')"> Atrás</button>
+
+
+      </div>
+      
+    </div>
+  
+    
+  </body>
+  

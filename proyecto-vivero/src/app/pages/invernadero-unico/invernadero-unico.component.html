@@ -1,0 +1,47 @@
+
+<body>
+    <div class="container">
+      <br />
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <img src="Vector.png" alt="imagen" />
+          <a class="navbar-brand margen">SmartGarden</a>
+  
+          <a class="margen inicio" (click)="navegate('/home')">Inicio</a>
+  
+          <div
+            class="collapse navbar-collapse margenDerecha"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav esquina ms-auto">
+              <a class="nav-link capsula registro inicio" (click)="cerrarSesion()"
+                >Cerrar Sesion</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <hr />
+  
+    <div class="container2">
+      <h1>Invernadero</h1>
+      <div class="card-grid">
+
+        <div class="card">
+          <img src="invernadero-grande.png" alt="Icono de persona" class="card-icon" />
+          <p>Temperatura: {{temperaruta}}</p>
+          <p>Gas: {{gas}}</p>
+          <p>Humedad: {{humedad}}</p>
+        </div>
+        <br>
+        <button class="card-button" (click)="navegate('/invernaderos')"> Atrás</button>
+
+
+      </div>
+      
+    </div>
+  
+    
+  </body>
+  

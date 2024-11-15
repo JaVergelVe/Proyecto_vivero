@@ -1,0 +1,111 @@
+
+.inicio{
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.margen.inicio:hover {
+    color: #0056b3; 
+  }
+.container {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    padding: 15px;
+     
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.card-name {
+    flex-grow: 1;
+    font-size: 22px;
+    color: #7CBE27;
+    font-weight: bold;
+    text-align: left;
+}
+
+.card-button {
+    background-color: #7CBE27;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.card-button:hover {
+    background-color: green;
+}
+
+
+
+
+
+
+.capsula{
+    padding: 10px 20px !important; 
+    background: #7CBE27;
+    color: white;                           
+    border-radius: 50px;             
+    display: inline-block; 
+    font-weight: bold;  
+    border: none;
+}
+
+
+
+.capsula:hover {
+    background-color: green;     
+  }
+
+.verde:hover{
+    color: green;
+}
+
+  .verde{
+    text-decoration: none; 
+    color: #7CBE27;
+  }
+
+ body {
+    font-size: 22px; 
+    box-sizing: border-box;
+}
+
+
+.margen{
+  margin-left: 20px;
+}
+
+
+
+.agregar{
+
+    color: #7CBE27;
+}
