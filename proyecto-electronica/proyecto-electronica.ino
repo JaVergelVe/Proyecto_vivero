@@ -167,8 +167,21 @@ void loop() {
   webSocket.loop();  // Asegúrate de llamar a loop() para manejar las conexiones WebSocket
   if (millis() - ultimoEnvio >= INTERVALO_ENVIO) {
     String mensaje = crearMensajeJSON(temperatura, humedadEstado, gasEstado);
-    webSocket.broadcastTXT(mensaje);  // Enviar a todos los clientes conectados
-    Serial.println("Enviando datos: " + mensaje);
+    // Recorrer los clientes conectados
+    bool hayClientesConectados = false;
+    for (int i = 0; i < WEBSOCKETS_SERVER_CLIENT_MAX; i++) {
+      if (webSocket.remoteIP(i)) { // Verifica si el cliente está activo
+        hayClientesConectados = true;
+        break;
+      }
+    }
+
+    if (hayClientesConectados) { 
+      webSocket.broadcastTXT(mensaje); // Envía el mensaje a todos los clientes
+      Serial.println("Enviando datos: " + mensaje);
+    } else { 
+      Serial.println("Sin clientes conectados. Esperando...");
+    }
     ultimoEnvio = millis();
   }
 }
