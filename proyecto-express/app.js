@@ -22,9 +22,17 @@ wss.on('connection', (ws) => {
 
     // Escuchar mensajes desde el ESP32
     ws.on('message', (message) => {
-        console.log('Mensaje recibido:', message);
+        console.log('Mensaje recibido:', message.toString());
+
         // Enviar una respuesta opcional
-        ws.send('Mensaje recibido en el servidor');
+        //ws.send('Mensaje recibido en el servidor');
+
+        // Reenviar el mensaje a todos los clientes conectados
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString()); // Enviar el mensaje a los clientes
+            }
+        });
     });
 
     // Manejar la desconexión
