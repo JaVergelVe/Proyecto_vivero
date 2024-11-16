@@ -52,8 +52,6 @@ void conectarWIFI()
   {
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
-    // Connect to WPA/WPA2 network:
-    WiFi.begin(ssid, pass);
     // wait 1 second for connection:
     delay(1000);
   }
@@ -92,27 +90,12 @@ void setup()
   Serial.begin(9600);
   Serial.println("Iniciando sensores...");
 
+  // Esperar a que el puerto serial se conecte (solo necesario para puertos USB nativos)
   while (!Serial)
   {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD)
-  {
-    Serial.println("WiFi shield not present");
-    // don't continue:
-    while (true)
-      ;
-  }
 
-  // Configuración del ESP32 como punto de acceso
-  if (WiFi.status() == WL_NO_SHIELD)
-  {
-    Serial.println("WiFi shield not present");
-    // don't continue:
-    while (true)
-      ;
-  }
   conectarWIFI();
   Serial.println("You're connected to the network");
   printWifiData();
@@ -177,6 +160,13 @@ String crearMensajeJSON(float temperatura, int humedadEstado, int gasEstado)
 // Bucle principal
 void loop()
 {
+  // Reconnect to WiFi if disconnected
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.println("WiFi disconnected. Attempting to reconnect...");
+    conectarWIFI();
+  }
+
   int humedadEstado = digitalRead(pinHumiditySensor);
   int gasEstado = digitalRead(MQ5_PIN);
   float temperatura = obtenerTemperatura();
@@ -196,18 +186,8 @@ void loop()
   if (millis() - ultimoEnvio >= INTERVALO_ENVIO)
   {
     String mensaje = crearMensajeJSON(temperatura, humedadEstado, gasEstado);
-    // Recorrer los clientes conectados
-    bool hayClientesConectados = false;
-    for (int i = 0; i < WEBSOCKETS_SERVER_CLIENT_MAX; i++)
-    {
-      if (webSocket.remoteIP(i))
-      { // Verifica si el cliente está activo
-        hayClientesConectados = true;
-        break;
-      }
-    }
 
-    if (hayClientesConectados)
+    if (webSocket.connectedClients() > 0)
     {
       webSocket.broadcastTXT(mensaje); // Envía el mensaje a todos los clientes
       Serial.println("Enviando datos: " + mensaje);
