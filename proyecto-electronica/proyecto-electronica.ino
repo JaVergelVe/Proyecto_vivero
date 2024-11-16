@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include <SPI.h>
-#include <WebSocketsClient.h>
+#include <WebSocketsServer.h>
 #include <DHT.h>
 
 // Pines definidos como constantes
@@ -25,20 +25,20 @@ bool bombaEncendida = false;
 // Inicialización del sensor DHT
 DHT dht(DHT11_PIN, DHT11);
 
-// Inicializar el servidor WebSocket y el servidor HTTP
-WebSocketsClient webSocket;
+// Inicializar el servidor WebSocket
+WebSocketsServer webSocket = WebSocketsServer(81);
 
-void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
     switch (type) {
         case WStype_TEXT:
-            Serial.printf("Mensaje recibido: %s\n", payload);
+            Serial.printf("Mensaje recibido de %u: %s\n", num, payload);
             break;
         case WStype_DISCONNECTED:
-            Serial.println("Desconectado del servidor WebSocket.");
+            Serial.printf("Cliente %u desconectado.\n", num);
             break;
         case WStype_CONNECTED:
-            Serial.println("Conectado al servidor WebSocket.");
-            webSocket.sendTXT("Hola desde ESP32!");
+            Serial.printf("Cliente %u conectado.\n", num);
+            webSocket.sendTXT(num, "Hola desde ESP32!");
             break;
     }
 }
@@ -105,14 +105,14 @@ void setup() {
   Serial.print("You're connected to the network");
   printWifiData();
 
-  webSocket.begin("http://localhost:", 3000, "/");  // Cambia por la IP de tu servidor
+  webSocket.begin();
   webSocket.onEvent(webSocketEvent);
-  
+
   // Configuración de pines
   pinMode(pinHumiditySensor, INPUT);
   pinMode(MQ5_PIN, INPUT);
   pinMode(PUMP_PIN, OUTPUT);
-  
+
   // Estado inicial de la bomba (apagada)
   digitalWrite(PUMP_PIN, LOW);
 
@@ -164,14 +164,11 @@ void loop() {
   controlarBomba(humedadEstado);
 
   // Enviar datos a través del WebSocket solo si ha pasado el intervalo
+  webSocket.loop();  // Asegúrate de llamar a loop() para manejar las conexiones WebSocket
   if (millis() - ultimoEnvio >= INTERVALO_ENVIO) {
     String mensaje = crearMensajeJSON(temperatura, humedadEstado, gasEstado);
-    //if (ws.count() > 0) { // Enviar solo si hay clientes conectados
-      //ws.textAll(mensaje);
-      Serial.println("Enviando datos: " + mensaje);
-    //} else {
-      Serial.println("Sin clientes conectados. Esperando...");
-    //}
+    webSocket.broadcastTXT(mensaje);  // Enviar a todos los clientes conectados
+    Serial.println("Enviando datos: " + mensaje);
     ultimoEnvio = millis();
   }
 }
