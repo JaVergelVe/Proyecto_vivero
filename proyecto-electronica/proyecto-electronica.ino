@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include <SPI.h>
-#include <WebSocketsServer.h>
+#include <WebSocketsClient.h>
 #include <DHT.h>
 
 // Pines definidos como constantes
@@ -12,6 +12,10 @@ const int PUMP_PIN = 13;
 // Configuración del Punto de Acceso
 const char *ssid = "FLIA-VERGEL"; //  your network SSID (name)
 const char *pass = "Julian22";    // your network password
+
+// Dirección del servidor WebSocket
+const char *webSocketServer = "192.168.1.9";
+const int webSocketPort = 3000;
 
 // Definición de constantes de tiempo
 const unsigned long INTERVALO_ENVIO = 2000; // Intervalo de envío de datos en ms
@@ -25,22 +29,22 @@ bool bombaEncendida = false;
 // Inicialización del sensor DHT
 DHT dht(DHT11_PIN, DHT11);
 
-// Inicializar el servidor WebSocket
-WebSocketsServer webSocket = WebSocketsServer(8300);
+// Inicializar el cliente WebSocket
+WebSocketsClient webSocket;
 
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
+void webSocketEvent(WStype_t type, uint8_t *payload, size_t length)
 {
   switch (type)
   {
-  case WStype_TEXT:
-    Serial.printf("Mensaje recibido de %u: %s\n", num, payload);
-    break;
   case WStype_DISCONNECTED:
-    Serial.printf("Cliente %u desconectado.\n", num);
+    Serial.println("WebSocket disconnected");
     break;
   case WStype_CONNECTED:
-    Serial.printf("Cliente %u conectado.\n", num);
-    webSocket.sendTXT(num, "Hola desde ESP32!");
+    Serial.println("WebSocket connected");
+    webSocket.sendTXT("Hello from ESP32");
+    break;
+  case WStype_TEXT:
+    Serial.printf("WebSocket message: %s\n", payload);
     break;
   }
 }
@@ -100,9 +104,9 @@ void setup()
   Serial.println("You're connected to the network");
   printWifiData();
 
-  webSocket.begin();
+  webSocket.begin(webSocketServer, webSocketPort, "/");
   webSocket.onEvent(webSocketEvent);
-  Serial.println("WebSocket server started");
+  Serial.println("WebSocket client started");
 
   // Configuración de pines
   pinMode(pinHumiditySensor, INPUT);
@@ -187,14 +191,14 @@ void loop()
   {
     String mensaje = crearMensajeJSON(temperatura, humedadEstado, gasEstado);
 
-    if (webSocket.connectedClients() > 0)
+    if (webSocket.isConnected())
     {
-      webSocket.broadcastTXT(mensaje); // Envía el mensaje a todos los clientes
+      webSocket.sendTXT(mensaje); // Envía el mensaje al servidor
       Serial.println("Enviando datos: " + mensaje);
     }
     else
     {
-      Serial.println("Sin clientes conectados. Esperando...");
+      Serial.println("WebSocket no conectado. Esperando...");
     }
     ultimoEnvio = millis();
   }
