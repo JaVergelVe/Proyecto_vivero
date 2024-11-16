@@ -10,8 +10,8 @@ const int DHT11_PIN = 26;
 const int PUMP_PIN = 13;
 
 // Configuración del Punto de Acceso
-const char* ssid = "FLIA-VERGEL";     //  your network SSID (name)
-const char* pass = "Julian22";  // your network password
+const char *ssid = "FLIA-VERGEL"; //  your network SSID (name)
+const char *pass = "Julian22";    // your network password
 
 // Definición de constantes de tiempo
 const unsigned long INTERVALO_ENVIO = 2000; // Intervalo de envío de datos en ms
@@ -28,35 +28,42 @@ DHT dht(DHT11_PIN, DHT11);
 // Inicializar el servidor WebSocket
 WebSocketsServer webSocket = WebSocketsServer(8300);
 
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
-    switch (type) {
-        case WStype_TEXT:
-            Serial.printf("Mensaje recibido de %u: %s\n", num, payload);
-            break;
-        case WStype_DISCONNECTED:
-            Serial.printf("Cliente %u desconectado.\n", num);
-            break;
-        case WStype_CONNECTED:
-            Serial.printf("Cliente %u conectado.\n", num);
-            webSocket.sendTXT(num, "Hola desde ESP32!");
-            break;
-    }
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
+{
+  switch (type)
+  {
+  case WStype_TEXT:
+    Serial.printf("Mensaje recibido de %u: %s\n", num, payload);
+    break;
+  case WStype_DISCONNECTED:
+    Serial.printf("Cliente %u desconectado.\n", num);
+    break;
+  case WStype_CONNECTED:
+    Serial.printf("Cliente %u conectado.\n", num);
+    webSocket.sendTXT(num, "Hola desde ESP32!");
+    break;
+  }
 }
 
-void conectarWIFI(){
+void conectarWIFI()
+{
   WiFi.begin(ssid, pass);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
     // Connect to WPA/WPA2 network:
     WiFi.begin(ssid, pass);
-    //Serial.println(status);
-    // wait 10 seconds for connection:
+    // wait 1 second for connection:
     delay(1000);
   }
+  Serial.println("Connected to WiFi");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
 }
 
-void printWifiData() {
+void printWifiData()
+{
   // print your WiFi shield's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
@@ -80,32 +87,39 @@ void printWifiData() {
 }
 
 // Configuración inicial del sistema
-void setup() { 
+void setup()
+{
   Serial.begin(9600);
   Serial.println("Iniciando sensores...");
 
-  while (!Serial) {
+  while (!Serial)
+  {
     ; // wait for serial port to connect. Needed for native USB port only
   }
   // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
+  if (WiFi.status() == WL_NO_SHIELD)
+  {
     Serial.println("WiFi shield not present");
     // don't continue:
-    while (true);
+    while (true)
+      ;
   }
 
   // Configuración del ESP32 como punto de acceso
-  if (WiFi.status() == WL_NO_SHIELD) {
+  if (WiFi.status() == WL_NO_SHIELD)
+  {
     Serial.println("WiFi shield not present");
     // don't continue:
-    while (true);
+    while (true)
+      ;
   }
   conectarWIFI();
-  Serial.print("You're connected to the network");
+  Serial.println("You're connected to the network");
   printWifiData();
 
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
+  Serial.println("WebSocket server started");
 
   // Configuración de pines
   pinMode(pinHumiditySensor, INPUT);
@@ -120,18 +134,23 @@ void setup() {
 }
 
 // Función para leer los datos del sensor DHT11
-float obtenerTemperatura() {
+float obtenerTemperatura()
+{
   return dht.readTemperature();
 }
 
 // Función para manejar la bomba de agua
-void controlarBomba(int humedadEstado) {
-  if (humedadEstado == HIGH && !bombaEncendida) {
+void controlarBomba(int humedadEstado)
+{
+  if (humedadEstado == HIGH && !bombaEncendida)
+  {
     Serial.println("---!! AGUA !!---");
     digitalWrite(PUMP_PIN, HIGH);
     bombaEncendida = true;
     tiempoBombaActivada = millis();
-  } else if (bombaEncendida && (millis() - tiempoBombaActivada >= TIEMPO_BOMBA)) {
+  }
+  else if (bombaEncendida && (millis() - tiempoBombaActivada >= TIEMPO_BOMBA))
+  {
     digitalWrite(PUMP_PIN, LOW);
     bombaEncendida = false;
     Serial.println("Bomba apagada");
@@ -139,12 +158,14 @@ void controlarBomba(int humedadEstado) {
 }
 
 // Función para detectar gas
-String detectarGas(int gasEstado) {
+String detectarGas(int gasEstado)
+{
   return (gasEstado == HIGH) ? "NO DETECTADO" : "DETECTADO";
 }
 
 // Función para crear mensaje JSON con datos de sensores
-String crearMensajeJSON(float temperatura, int humedadEstado, int gasEstado) {
+String crearMensajeJSON(float temperatura, int humedadEstado, int gasEstado)
+{
   String mensaje = "{";
   mensaje += "\"temperatura\":" + String(temperatura) + ",";
   mensaje += "\"humedadSuelo\":" + String(humedadEstado) + ",";
@@ -154,31 +175,45 @@ String crearMensajeJSON(float temperatura, int humedadEstado, int gasEstado) {
 }
 
 // Bucle principal
-void loop() {
+void loop()
+{
   int humedadEstado = digitalRead(pinHumiditySensor);
   int gasEstado = digitalRead(MQ5_PIN);
   float temperatura = obtenerTemperatura();
+
+  Serial.print("Humedad del suelo: ");
+  Serial.println(humedadEstado);
+  Serial.print("Estado del gas: ");
+  Serial.println(gasEstado);
+  Serial.print("Temperatura: ");
+  Serial.println(temperatura);
 
   // Control de la bomba basado en humedad
   controlarBomba(humedadEstado);
 
   // Enviar datos a través del WebSocket solo si ha pasado el intervalo
-  webSocket.loop();  // Asegúrate de llamar a loop() para manejar las conexiones WebSocket
-  if (millis() - ultimoEnvio >= INTERVALO_ENVIO) {
+  webSocket.loop(); // Asegúrate de llamar a loop() para manejar las conexiones WebSocket
+  if (millis() - ultimoEnvio >= INTERVALO_ENVIO)
+  {
     String mensaje = crearMensajeJSON(temperatura, humedadEstado, gasEstado);
     // Recorrer los clientes conectados
     bool hayClientesConectados = false;
-    for (int i = 0; i < WEBSOCKETS_SERVER_CLIENT_MAX; i++) {
-      if (webSocket.remoteIP(i)) { // Verifica si el cliente está activo
+    for (int i = 0; i < WEBSOCKETS_SERVER_CLIENT_MAX; i++)
+    {
+      if (webSocket.remoteIP(i))
+      { // Verifica si el cliente está activo
         hayClientesConectados = true;
         break;
       }
     }
 
-    if (hayClientesConectados) { 
+    if (hayClientesConectados)
+    {
       webSocket.broadcastTXT(mensaje); // Envía el mensaje a todos los clientes
       Serial.println("Enviando datos: " + mensaje);
-    } else { 
+    }
+    else
+    {
       Serial.println("Sin clientes conectados. Esperando...");
     }
     ultimoEnvio = millis();
