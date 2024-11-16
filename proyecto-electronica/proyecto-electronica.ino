@@ -26,7 +26,7 @@ bool bombaEncendida = false;
 DHT dht(DHT11_PIN, DHT11);
 
 // Inicializar el servidor WebSocket
-WebSocketsServer webSocket = WebSocketsServer(81);
+WebSocketsServer webSocket = WebSocketsServer(8300);
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
     switch (type) {
@@ -60,7 +60,6 @@ void printWifiData() {
   // print your WiFi shield's IP address:
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
-  Serial.println(ip);
   Serial.println(ip);
 
   // print your MAC address:
