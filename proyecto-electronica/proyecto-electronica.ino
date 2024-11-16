@@ -175,13 +175,6 @@ void loop()
   int gasEstado = digitalRead(MQ5_PIN);
   float temperatura = obtenerTemperatura();
 
-  Serial.print("Humedad del suelo: ");
-  Serial.println(humedadEstado);
-  Serial.print("Estado del gas: ");
-  Serial.println(gasEstado);
-  Serial.print("Temperatura: ");
-  Serial.println(temperatura);
-
   // Control de la bomba basado en humedad
   controlarBomba(humedadEstado);
 
